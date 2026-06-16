@@ -218,19 +218,18 @@ export default function App() {
  
 // Chargement
   const chargerProcessus = useCallback(() =>
-    fetch(`${API}/processus`, { headers: headers() }).then(r => r.json()).then(setProcessus)
+    fetch(`${API}/processus`, { headers: { authorization: `Bearer ${token}` } }).then(r => r.json()).then(setProcessus)
   , [token])
 
   const chargerWorkflows = useCallback((pcs) =>
-    fetch(`${API}/processus/${pcs.pcs_id}/workflows`, { headers: headers() }).then(r => r.json()).then(setWorkflows)
+    fetch(`${API}/processus/${pcs.pcs_id}/workflows`, { headers: { authorization: `Bearer ${token}` } }).then(r => r.json()).then(setWorkflows)
   , [token])
 
   const chargerActivites = useCallback((wkf) =>
-    fetch(`${API}/workflows/${wkf.wkf_id}/activites`, { headers: headers() }).then(r => r.json()).then(setActivites)
+    fetch(`${API}/workflows/${wkf.wkf_id}/activites`, { headers: { authorization: `Bearer ${token}` } }).then(r => r.json()).then(setActivites)
   , [token])
 
   useEffect(() => { if (token) chargerProcessus() }, [token, chargerProcessus])
- 
   // Navigation
   const voirWorkflows = (pcs) => {
     setSelectedPcs(pcs); setSelectedWkf(null); setActivites([])
