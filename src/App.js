@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
  
 const C = {
   primary: '#4f46e5',
@@ -216,18 +216,20 @@ export default function App() {
     setSelectedWkf(null)
   }
  
-  // Chargement
-  const chargerProcessus = () =>
+// Chargement
+  const chargerProcessus = useCallback(() =>
     fetch(`${API}/processus`, { headers: headers() }).then(r => r.json()).then(setProcessus)
- 
-  const chargerWorkflows = (pcs) =>
+  , [token])
+
+  const chargerWorkflows = useCallback((pcs) =>
     fetch(`${API}/processus/${pcs.pcs_id}/workflows`, { headers: headers() }).then(r => r.json()).then(setWorkflows)
- 
-  const chargerActivites = (wkf) =>
+  , [token])
+
+  const chargerActivites = useCallback((wkf) =>
     fetch(`${API}/workflows/${wkf.wkf_id}/activites`, { headers: headers() }).then(r => r.json()).then(setActivites)
- 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { if (token) chargerProcessus() }, [token])
+  , [token])
+
+  useEffect(() => { if (token) chargerProcessus() }, [token, chargerProcessus])
  
   // Navigation
   const voirWorkflows = (pcs) => {
