@@ -226,6 +226,7 @@ export default function App() {
   const chargerActivites = (wkf) =>
     fetch(`${API}/workflows/${wkf.wkf_id}/activites`, { headers: headers() }).then(r => r.json()).then(setActivites)
  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (token) chargerProcessus() }, [token])
  
   // Navigation
