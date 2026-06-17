@@ -144,7 +144,7 @@ const s = {
   },
 }
  
-const API = 'https://projetstage-secure.onrender.com'
+const API = 'https://projetstage-secure-1.onrender.com'
  
 export default function App() {
   const [token, setToken] = useState('')
