@@ -247,10 +247,13 @@ export default function App() {
     if (!res.ok) return showToast('Erreur lors de la création')
     setNouveauPcs(''); chargerProcessus()
   }
-  const supprimerProcessus = async (id) => {
-    await fetch(`${API}/processus/${id}`, { method: 'DELETE', headers: headers() })
-    if (selectedPcs?.pcs_id === id) { setSelectedPcs(null); setWorkflows([]); setActivites([]) }
-    chargerProcessus()
+  const supprimerWorkflow = async (id) => {
+    await fetch(`${API}/workflows/${id}`, { method: 'DELETE', headers: headers() })
+    if (selectedWkf?.wkf_id === id) {
+      setSelectedWkf(null)
+      setActivites([])
+    }
+    chargerWorkflows(selectedPcs)
   }
   const modifierProcessus = async (id) => {
     await fetch(`${API}/processus/${id}`, {
