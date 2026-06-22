@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs'
+import mermaid from 'mermaid'
 
 const API = 'https://projetstage-secure-1.onrender.com'
 mermaid.initialize({ startOnLoad:false, theme:'neutral', flowchart:{ curve:'basis' } })
