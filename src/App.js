@@ -124,7 +124,6 @@ const S = {
   toastError:{ background:C.red, color:'#fff' },
   toastSuccess:{ background:C.green, color:'#fff' },
 
-  // Modal de confirmation
   overlay:{ position:'fixed', inset:0, background:'rgba(15,23,42,.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:4000, animation:'fadeIn .15s ease' },
   modal:{ background:'#fff', borderRadius:16, padding:28, width:380, boxShadow:'0 24px 70px rgba(0,0,0,.3)', animation:'popIn .2s ease' },
   modalIcon:{ width:48, height:48, borderRadius:12, display:'flex', alignItems:'center', justifyContent:'center', fontSize:24, marginBottom:14 },
@@ -186,7 +185,7 @@ export default function App() {
   const [search, setSearch]     = useState('')
   const [showDonePcs, setShowDonePcs] = useState(false)
   const [showDoneWkf, setShowDoneWkf] = useState(false)
-  const [confirm, setConfirm]   = useState(null) // { type:'delete'|'edit', message, onConfirm }
+  const [confirm, setConfirm]   = useState(null)
 
   const dragItem = useRef(null)
   const [dragInfo, setDragInfo] = useState({ list:null, idx:null, over:null })
@@ -203,7 +202,6 @@ export default function App() {
 
   const estTermine = (x) => x.statut === 'TERMINE'
 
-  // ── Échap ferme modale / annule édition ──
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'Escape') {
@@ -248,6 +246,14 @@ export default function App() {
 
   useEffect(() => { if (token) chargerProcessus() }, [token, chargerProcessus])
 
+  // ── Sauvegarde de l'ordre en base ──
+  const sauverOrdrePcs = (items) =>
+    fetch(`${API}/processus/ordre`, { method:'PATCH', headers:h(true), body:JSON.stringify({ ordre: items.map(p=>p.pcs_id) }) })
+  const sauverOrdreWkf = (items) =>
+    fetch(`${API}/workflows/ordre`, { method:'PATCH', headers:h(true), body:JSON.stringify({ ordre: items.map(w=>w.wkf_id) }) })
+  const sauverOrdreAct = (items) =>
+    fetch(`${API}/workflows/${selectedWkf.wkf_id}/activites/ordre`, { method:'PATCH', headers:h(true), body:JSON.stringify({ ordre: items.map(a=>a.act_id) }) })
+
   // ── Mermaid ──
   const genererMermaid = async (acts) => {
     if (!acts || acts.length===0) { setMermaidSvg(''); return }
@@ -282,8 +288,7 @@ export default function App() {
     setNouveauPcs(''); setShowAddPcs(false); chargerProcessus(); showToast('Processus créé', 'success')
   }
   const supprimerProcessus = (id, nom) => setConfirm({
-    type:'delete', icon:'🗑️',
-    title:'Supprimer ce processus ?',
+    type:'delete', icon:'🗑️', title:'Supprimer ce processus ?',
     message:`« ${nom} » et tous ses workflows et activités seront supprimés définitivement.`,
     onConfirm: async () => {
       await fetch(`${API}/processus/${id}`, { method:'DELETE', headers:h() })
@@ -309,8 +314,7 @@ export default function App() {
     setNouveauWkf(''); setShowAddWkf(false); chargerWorkflows(selectedPcs); showToast('Workflow créé', 'success')
   }
   const supprimerWorkflow = (id, nom) => setConfirm({
-    type:'delete', icon:'🗑️',
-    title:'Supprimer ce workflow ?',
+    type:'delete', icon:'🗑️', title:'Supprimer ce workflow ?',
     message:`« ${nom} » et ses activités liées seront supprimés définitivement.`,
     onConfirm: async () => {
       await fetch(`${API}/workflows/${id}`, { method:'DELETE', headers:h() })
@@ -336,8 +340,7 @@ export default function App() {
     setNouvelleAct(''); chargerActivites(selectedWkf); showToast('Activité ajoutée', 'success')
   }
   const supprimerActivite = (id, nom) => setConfirm({
-    type:'delete', icon:'🗑️',
-    title:'Supprimer cette activité ?',
+    type:'delete', icon:'🗑️', title:'Supprimer cette activité ?',
     message:`« ${nom} » sera supprimée définitivement.`,
     onConfirm: async () => {
       await fetch(`${API}/activites/${id}`, { method:'DELETE', headers:h() })
@@ -355,26 +358,31 @@ export default function App() {
     chargerActivites(selectedWkf)
   }
 
-  // ── Drag & drop ──
+  // ── Drag & drop AVEC persistance ──
   const onDragStart = (list, idx) => { dragItem.current = { list, idx }; setDragInfo({ list, idx, over:null }) }
   const onDragEnter = (list, idx) => { if (dragItem.current?.list===list) setDragInfo(d=>({ ...d, over:idx })) }
-  const onDragEnd = (list, items, setItems) => {
+  const onDragEnd = (list, items, setItems, sauver) => {
     const di = dragItem.current
     if (di && dragInfo.over!==null && di.idx!==dragInfo.over) {
       const copy=[...items]; const [m]=copy.splice(di.idx,1); copy.splice(dragInfo.over,0,m)
-      setItems(copy); if (list==='act') genererMermaid(copy)
+      setItems(copy)
+      if (list==='act') genererMermaid(copy)
+      sauver(copy).then(()=>showToast('Ordre enregistré', 'success')).catch(()=>showToast('Erreur sauvegarde'))
     }
     dragItem.current=null; setDragInfo({ list:null, idx:null, over:null })
   }
 
-  // ── Numéro d'ordre ──
-  const validerOrdre = (items, setItems, idx, label) => {
+  // ── Numéro d'ordre AVEC persistance ──
+  const validerOrdre = (items, setItems, idx, label, sauver) => {
     const n = parseInt(ordValue)
     if (isNaN(n)||n<1) { setEditingOrd(null); return }
     if (n>items.length) { showToast(`Maximum : ${items.length}`, 'error'); return }
+    if (n===idx+1) { setEditingOrd(null); return }
     const copy=[...items]; const [m]=copy.splice(idx,1); copy.splice(n-1,0,m)
-    setItems(copy); if (label==='act') genererMermaid(copy)
-    setEditingOrd(null); showToast('Ordre mis à jour', 'success')
+    setItems(copy)
+    if (label==='act') genererMermaid(copy)
+    sauver(copy).then(()=>showToast('Ordre enregistré', 'success')).catch(()=>showToast('Erreur sauvegarde'))
+    setEditingOrd(null)
   }
 
   // ── Canvas drag ──
@@ -396,7 +404,6 @@ export default function App() {
 
   const initiales = (n) => n ? n.slice(0,2).toUpperCase() : '?'
 
-  // ── Filtrage + tri actif/terminé ──
   const filtrer = (items, champNom) => {
     const q = search.toLowerCase()
     return items.filter(x => !q || (x[champNom]||'').toLowerCase().includes(q))
@@ -436,13 +443,13 @@ export default function App() {
     </>
   )
 
-  // ── Rendu d'un item processus ──
+  // ── Rendu processus ──
   const renderPcs = (p, idx, isDone) => (
     <div key={p.pcs_id} className="fade-item" draggable={editingPcs!==p.pcs_id && !isDone}
       onDragStart={()=>!isDone&&onDragStart('pcs',idx)}
       onDragEnter={()=>!isDone&&onDragEnter('pcs',idx)}
       onDragOver={e=>e.preventDefault()}
-      onDragEnd={()=>!isDone&&onDragEnd('pcs',processus,setProcessus)}>
+      onDragEnd={()=>!isDone&&onDragEnd('pcs',pcsActifs,setProcessus,sauverOrdrePcs)}>
       {editingPcs===p.pcs_id ? (
         <div style={{display:'flex',gap:4,marginBottom:3}}>
           <input style={{...S.input,flex:1}} value={editValue} autoFocus
@@ -459,7 +466,7 @@ export default function App() {
           {!isDone && (editingOrd===`pcs-${idx}` ? (
             <input style={S.ordInput} value={ordValue} autoFocus type="number"
               onChange={e=>setOrdValue(e.target.value)} onClick={e=>e.stopPropagation()}
-              onKeyDown={e=>{if(e.key==='Enter'){e.stopPropagation();validerOrdre(pcsActifs,setProcessus,idx,'pcs')}}}
+              onKeyDown={e=>{if(e.key==='Enter'){e.stopPropagation();validerOrdre(pcsActifs,setProcessus,idx,'pcs',sauverOrdrePcs)}}}
               onBlur={()=>setEditingOrd(null)} />
           ) : (
             <span style={{...S.ordBadge,...(selectedPcs?.pcs_id===p.pcs_id?S.ordBadgeActive:{})}}
@@ -479,13 +486,13 @@ export default function App() {
     </div>
   )
 
-  // ── Rendu d'un workflow ──
+  // ── Rendu workflow ──
   const renderWkf = (w, idx, isDone) => (
     <div key={w.wkf_id} className="fade-item" draggable={editingWkf!==w.wkf_id && !isDone}
       onDragStart={()=>!isDone&&onDragStart('wkf',idx)}
       onDragEnter={()=>!isDone&&onDragEnter('wkf',idx)}
       onDragOver={e=>e.preventDefault()}
-      onDragEnd={()=>!isDone&&onDragEnd('wkf',workflows,setWorkflows)}>
+      onDragEnd={()=>!isDone&&onDragEnd('wkf',wkfActifs,setWorkflows,sauverOrdreWkf)}>
       {editingWkf===w.wkf_id ? (
         <div style={{display:'flex',gap:4,marginBottom:8}}>
           <input style={{...S.input,flex:1}} value={editValue} autoFocus
@@ -502,7 +509,7 @@ export default function App() {
             {!isDone && (editingOrd===`wkf-${idx}` ? (
               <input style={S.ordInput} value={ordValue} autoFocus type="number"
                 onChange={e=>setOrdValue(e.target.value)} onClick={e=>e.stopPropagation()}
-                onKeyDown={e=>{if(e.key==='Enter'){e.stopPropagation();validerOrdre(wkfActifs,setWorkflows,idx,'wkf')}}}
+                onKeyDown={e=>{if(e.key==='Enter'){e.stopPropagation();validerOrdre(wkfActifs,setWorkflows,idx,'wkf',sauverOrdreWkf)}}}
                 onBlur={()=>setEditingOrd(null)} />
             ) : (
               <span style={S.ordBadge} onClick={e=>{e.stopPropagation();setEditingOrd(`wkf-${idx}`);setOrdValue(String(idx+1))}}>{idx+1}</span>
@@ -532,7 +539,6 @@ export default function App() {
           <span>{toast.type==='success'?'✓':'⚠'}</span>{toast.msg}
         </div>}
 
-        {/* MODAL CONFIRMATION */}
         {confirm && (
           <div style={S.overlay} onClick={()=>setConfirm(null)}>
             <div style={S.modal} onClick={e=>e.stopPropagation()}>
@@ -548,7 +554,6 @@ export default function App() {
           </div>
         )}
 
-        {/* SIDEBAR */}
         <div style={S.sidebar}>
           <div style={S.sbLogo} onClick={retourAccueil}>⬡</div>
           <div style={{...S.sbIcon,...S.sbIconActive}} title="Processus" onClick={retourAccueil}>📋</div>
@@ -556,7 +561,6 @@ export default function App() {
           <div style={S.sbIcon} title="Déconnexion" onClick={seDeconnecter}>🚪</div>
         </div>
 
-        {/* MAIN */}
         <div style={S.main}>
           <div style={S.topbar}>
             <div style={S.breadcrumb}>
@@ -569,7 +573,6 @@ export default function App() {
 
           <div style={S.panels}>
 
-            {/* PROCESSUS */}
             <div style={{...S.col, width:250, borderRight:`1px solid ${C.slate200}`}}>
               <div style={S.colHdr}>
                 <div style={{display:'flex',alignItems:'center'}}>
@@ -597,7 +600,6 @@ export default function App() {
               <div style={S.scroll}>
                 {pcsActifs.length===0 && pcsTermines.length===0 && <div style={S.empty}><div style={S.emptyIcon}>📂</div>Aucun processus</div>}
                 {pcsActifs.map((p,idx) => renderPcs(p, idx, false))}
-
                 {pcsTermines.length > 0 && (
                   <>
                     <div style={S.sectionLabel} onClick={()=>setShowDonePcs(!showDonePcs)}>
@@ -609,7 +611,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* WORKFLOWS */}
             {selectedPcs && (
               <div style={{...S.col, width:265, borderRight:`1px solid ${C.slate200}`, background:C.slate50}}>
                 <div style={S.colHdr}>
@@ -632,7 +633,6 @@ export default function App() {
                 <div style={S.scroll}>
                   {wkfActifs.length===0 && wkfTermines.length===0 && <div style={S.empty}><div style={S.emptyIcon}>🔀</div>Aucun workflow</div>}
                   {wkfActifs.map((w,idx) => renderWkf(w, idx, false))}
-
                   {wkfTermines.length > 0 && (
                     <>
                       <div style={S.sectionLabel} onClick={()=>setShowDoneWkf(!showDoneWkf)}>
@@ -645,7 +645,6 @@ export default function App() {
               </div>
             )}
 
-            {/* ACTIVITÉS */}
             {selectedWkf ? (
               <div style={S.actZone}>
                 <div style={S.actTop}>
@@ -678,7 +677,7 @@ export default function App() {
                           return (
                             <div key={a.act_id} className="fade-item" draggable={editingAct!==a.act_id}
                               onDragStart={()=>onDragStart('act',idx)} onDragEnter={()=>onDragEnter('act',idx)}
-                              onDragOver={e=>e.preventDefault()} onDragEnd={()=>onDragEnd('act',activites,setActivites)}
+                              onDragOver={e=>e.preventDefault()} onDragEnd={()=>onDragEnd('act',activites,setActivites,sauverOrdreAct)}
                               style={{...S.actRow,
                                 ...(done?{opacity:.6,background:'#f0fdf4',borderColor:C.greenBorder}:{}),
                                 ...(dragInfo.list==='act'&&dragInfo.idx===idx?S.actRowDrag:{}),
@@ -687,7 +686,7 @@ export default function App() {
                               {editingOrd===`act-${idx}` ? (
                                 <input style={{...S.ordInput,width:38,height:26}} value={ordValue} autoFocus type="number"
                                   onChange={e=>setOrdValue(e.target.value)}
-                                  onKeyDown={e=>e.key==='Enter'&&validerOrdre(activites,setActivites,idx,'act')}
+                                  onKeyDown={e=>e.key==='Enter'&&validerOrdre(activites,setActivites,idx,'act',sauverOrdreAct)}
                                   onBlur={()=>setEditingOrd(null)} />
                               ) : (
                                 <span style={{...S.actNum,...(done?S.actNumDone:{})}}
@@ -731,7 +730,6 @@ export default function App() {
                   ) : (
                     <div ref={canvasRef} style={S.canvas}
                       onMouseMove={moveCanvasDrag} onMouseUp={endCanvasDrag} onMouseLeave={endCanvasDrag}>
-                      {/* SVG flèches reliant les activités successives */}
                       <svg style={{position:'absolute',inset:0,width:'100%',height:'100%',zIndex:1,pointerEvents:'none'}}>
                         <defs>
                           <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
