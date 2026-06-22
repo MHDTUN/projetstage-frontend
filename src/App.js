@@ -2,7 +2,15 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import mermaid from 'mermaid'
 
 const API = 'https://projetstage-secure-1.onrender.com'
-mermaid.initialize({ startOnLoad:false, theme:'neutral', flowchart:{ curve:'basis' } })
+
+let mermaidPret = false
+function initMermaid() {
+  if (mermaidPret) return
+  try {
+    mermaid.initialize({ startOnLoad:false, securityLevel:'loose', theme:'neutral', flowchart:{ curve:'basis' } })
+    mermaidPret = true
+  } catch (e) { /* ignore */ }
+}
 
 const C = {
   indigo:'#6366f1', indigoDark:'#4f46e5', indigoLight:'#ede9fe', indigoText:'#5b21b6',
@@ -288,14 +296,23 @@ export default function App() {
   // ── Mermaid ──
   const genererMermaid = async (acts) => {
     if (!acts || acts.length===0) { setMermaidSvg(''); return }
+    initMermaid()
+    const clean = (s) => (s||'').replace(/["\[\]{}()]/g,'').replace(/[\n\r]/g,' ').trim() || 'Activité'
     const lignes = acts.map((a,i) => {
-      const label = (a.actnom||'').replace(/"/g,"'")
-      const shape = a.statut==='TERMINE' ? `A${i}["✓ ${label}"]` : `A${i}["${label}"]`
+      const label = clean(a.actnom)
+      const prefix = a.statut==='TERMINE' ? '✓ ' : ''
+      const shape = `A${i}["${prefix}${label}"]`
       return i < acts.length-1 ? `  ${shape} --> A${i+1}` : `  ${shape}`
     })
     const def = `flowchart TD\n  S([Début]) --> A0\n${lignes.join('\n')}\n  A${acts.length-1} --> E([Fin])`
-    try { const { svg } = await mermaid.render('m'+Date.now(), def); setMermaidSvg(svg) }
-    catch { setMermaidSvg('') }
+    try {
+      const id = 'mermaid-' + Math.random().toString(36).slice(2)
+      const { svg } = await mermaid.render(id, def)
+      setMermaidSvg(svg)
+    } catch (e) {
+      console.warn('Mermaid:', e.message)
+      setMermaidSvg('')
+    }
   }
 
   // ── Canvas ──
@@ -657,7 +674,7 @@ export default function App() {
   )
 
   // ── Zone Activités ──
-  const zoneActivites = (
+  const zoneActivites = !selectedWkf ? null : (
     <div style={S.actZone}>
       <div style={S.actTop}>
         <div style={{minWidth:0}}>
