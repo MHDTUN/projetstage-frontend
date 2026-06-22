@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import mermaid from 'mermaid'
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs'
 
 const API = 'https://projetstage-secure-1.onrender.com'
 mermaid.initialize({ startOnLoad:false, theme:'neutral', flowchart:{ curve:'basis' } })
@@ -34,7 +34,7 @@ const S = {
   sbSpacer:{ flex:1 },
 
   main:{ flex:1, display:'flex', flexDirection:'column', overflow:'hidden' },
-  topbar:{ minHeight:56, padding:'0 16px', borderBottom:`1px solid ${C.slate200}`, display:'flex', alignItems:'center', justifyContent:'space-between', background:C.white, flexShrink:0, gap:10 },
+  topbar:{ minHeight:56, padding:'0 16px', paddingTop:'env(safe-area-inset-top)', borderBottom:`1px solid ${C.slate200}`, display:'flex', alignItems:'center', justifyContent:'space-between', background:C.white, flexShrink:0, gap:10 },
   backBtn:{ width:36, height:36, borderRadius:9, border:`1px solid ${C.slate200}`, background:C.white, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', fontSize:18, color:C.slate600, flexShrink:0 },
   breadcrumb:{ display:'flex', alignItems:'center', gap:8, fontSize:14, color:C.slate400, overflow:'hidden' },
   breadLink:{ cursor:'pointer', transition:'color .12s', padding:'2px 4px', borderRadius:5, whiteSpace:'nowrap' },
@@ -152,7 +152,8 @@ const S = {
   modalConfirmIndigo:{ background:C.indigo, color:'#fff' },
 
   // Barre de navigation mobile en bas
-  mobileNav:{ display:'flex', borderTop:`1px solid ${C.slate200}`, background:C.white, flexShrink:0 },
+  mobileNav:{ display:'flex', borderTop:`1px solid ${C.slate200}`, background:C.white, flexShrink:0, paddingBottom:'env(safe-area-inset-bottom)', transition:'transform .25s ease' },
+  mobileNavHidden:{ transform:'translateY(130%)' },
   mobileNavBtn:{ flex:1, padding:'10px 0 12px', display:'flex', flexDirection:'column', alignItems:'center', gap:3, border:'none', background:'transparent', cursor:'pointer', fontSize:10, fontWeight:600, color:C.slate400 },
   mobileNavBtnActive:{ color:C.indigo },
   mobileNavIcon:{ fontSize:20 },
@@ -214,6 +215,8 @@ export default function App() {
 
   // Mobile : quel écran afficher ('pcs' | 'wkf' | 'act')
   const [mobileScreen, setMobileScreen] = useState('pcs')
+  const [navVisible, setNavVisible] = useState(true)
+  const lastScrollY = useRef(0)
 
   const dragItem = useRef(null)
   const [dragInfo, setDragInfo] = useState({ list:null, idx:null, over:null })
@@ -440,6 +443,13 @@ export default function App() {
   }
   const endCanvasDrag = () => { canvasDrag.current = null }
 
+  const onScrollMobile = (e) => {
+    const y = e.target.scrollTop
+    if (y > lastScrollY.current && y > 40) setNavVisible(false)
+    else setNavVisible(true)
+    lastScrollY.current = y
+  }
+
   const initiales = (n) => n ? n.slice(0,2).toUpperCase() : '?'
 
   const filtrer = (items, champNom) => {
@@ -596,7 +606,7 @@ export default function App() {
           </div>
         </div>
       )}
-      <div style={S.scroll}>
+      <div style={S.scroll} onScroll={isMobile ? onScrollMobile : undefined}>
         {pcsActifs.length===0 && pcsTermines.length===0 && <div style={S.empty}><div style={S.emptyIcon}>📂</div>Aucun processus</div>}
         {pcsActifs.map((p,idx) => renderPcs(p, idx, false))}
         {pcsTermines.length > 0 && (
@@ -631,7 +641,7 @@ export default function App() {
           </div>
         </div>
       )}
-      <div style={S.scroll}>
+      <div style={S.scroll} onScroll={isMobile ? onScrollMobile : undefined}>
         {wkfActifs.length===0 && wkfTermines.length===0 && <div style={S.empty}><div style={S.emptyIcon}>🔀</div>Aucun workflow</div>}
         {wkfActifs.map((w,idx) => renderWkf(w, idx, false))}
         {wkfTermines.length > 0 && (
@@ -647,7 +657,7 @@ export default function App() {
   )
 
   // ── Zone Activités ──
-  const zoneActivites = !selectedWkf ? null : (
+  const zoneActivites = (
     <div style={S.actZone}>
       <div style={S.actTop}>
         <div style={{minWidth:0}}>
@@ -669,7 +679,7 @@ export default function App() {
         </div>
       </div>
 
-      <div style={S.actBody}>
+      <div style={S.actBody} onScroll={isMobile ? onScrollMobile : undefined}>
         {actView==='list' ? (
           <>
             <div style={S.listCard}>
@@ -829,7 +839,7 @@ export default function App() {
           </div>
 
           {/* Nav bas mobile */}
-          <div style={S.mobileNav}>
+          <div style={{...S.mobileNav, ...(navVisible ? {} : S.mobileNavHidden)}}>
             <button style={{...S.mobileNavBtn,...(mobileScreen==='pcs'?S.mobileNavBtnActive:{})}} onClick={retourAccueil}>
               <span style={S.mobileNavIcon}>📋</span>Processus
             </button>
