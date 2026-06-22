@@ -6,8 +6,8 @@ mermaid.initialize({ startOnLoad:false, theme:'neutral', flowchart:{ curve:'basi
 
 const C = {
   indigo:'#6366f1', indigoDark:'#4f46e5', indigoLight:'#ede9fe', indigoText:'#5b21b6',
-  ink:'#0f172a', slate:'#1e293b', slate600:'#475569', slate400:'#94a3b8', slate200:'#e2e8f0', slate100:'#f1f5f9', slate50:'#f8fafc',
-  green:'#10b981', greenLight:'#dcfce7', greenText:'#166534',
+  ink:'#0f172a', slate:'#1e293b', slate600:'#475569', slate400:'#94a3b8', slate300:'#cbd5e1', slate200:'#e2e8f0', slate100:'#f1f5f9', slate50:'#f8fafc',
+  green:'#10b981', greenLight:'#dcfce7', greenText:'#166534', greenBorder:'#86efac',
   red:'#ef4444', redLight:'#fee2e2', amber:'#f59e0b', amberLight:'#fef3c7',
   white:'#fff',
 }
@@ -16,43 +16,54 @@ const S = {
   app:{ display:'flex', height:'100vh', fontFamily:"'Inter',system-ui,sans-serif", background:C.slate50, color:C.slate, overflow:'hidden' },
 
   sidebar:{ width:72, background:C.ink, display:'flex', flexDirection:'column', alignItems:'center', flexShrink:0, paddingTop:16, paddingBottom:16 },
-  sbLogo:{ width:40, height:40, background:C.indigo, borderRadius:11, display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontSize:20, marginBottom:24 },
-  sbIcon:{ width:44, height:44, borderRadius:11, display:'flex', alignItems:'center', justifyContent:'center', fontSize:19, cursor:'pointer', marginBottom:6, color:'#475569', transition:'all .15s', position:'relative' },
+  sbLogo:{ width:40, height:40, background:C.indigo, borderRadius:11, display:'flex', alignItems:'center', justifyContent:'center', color:'#fff', fontSize:20, marginBottom:24, cursor:'pointer' },
+  sbIcon:{ width:44, height:44, borderRadius:11, display:'flex', alignItems:'center', justifyContent:'center', fontSize:19, cursor:'pointer', marginBottom:6, color:'#475569', transition:'all .15s' },
   sbIconActive:{ background:'#1e293b', color:'#a5b4fc' },
   sbSpacer:{ flex:1 },
 
   main:{ flex:1, display:'flex', flexDirection:'column', overflow:'hidden' },
   topbar:{ height:56, padding:'0 24px', borderBottom:`1px solid ${C.slate200}`, display:'flex', alignItems:'center', justifyContent:'space-between', background:C.white, flexShrink:0 },
   breadcrumb:{ display:'flex', alignItems:'center', gap:8, fontSize:14, color:C.slate400 },
-  breadActive:{ color:C.slate, fontWeight:600 },
-  breadChip:{ background:C.indigoLight, color:C.indigoText, padding:'3px 10px', borderRadius:7, fontSize:13, fontWeight:600 },
-  userPill:{ display:'flex', alignItems:'center', gap:9, padding:'6px 14px', border:`1px solid ${C.slate200}`, borderRadius:22, fontSize:13, color:C.slate600, background:C.slate50, cursor:'pointer' },
+  breadLink:{ cursor:'pointer', transition:'color .12s', padding:'2px 4px', borderRadius:5 },
+  breadChip:{ background:C.indigoLight, color:C.indigoText, padding:'3px 10px', borderRadius:7, fontSize:13, fontWeight:600, cursor:'pointer' },
+  userPill:{ display:'flex', alignItems:'center', gap:9, padding:'6px 14px', border:`1px solid ${C.slate200}`, borderRadius:22, fontSize:13, color:C.slate600, background:C.slate50 },
   avatar:{ width:24, height:24, borderRadius:'50%', background:C.indigo, color:'#fff', fontSize:10, fontWeight:700, display:'flex', alignItems:'center', justifyContent:'center' },
 
   panels:{ flex:1, display:'flex', overflow:'hidden' },
 
   col:{ display:'flex', flexDirection:'column', background:C.white, flexShrink:0 },
-  colHdr:{ padding:'16px 16px 12px', display:'flex', alignItems:'center', justifyContent:'space-between' },
+  colHdr:{ padding:'16px 16px 10px', display:'flex', alignItems:'center', justifyContent:'space-between' },
   colTitle:{ fontSize:11, fontWeight:700, color:C.slate400, textTransform:'uppercase', letterSpacing:'.07em' },
   colCount:{ background:C.slate100, color:C.slate600, borderRadius:20, padding:'1px 8px', fontSize:11, fontWeight:700, marginLeft:8 },
-  addBtn:{ width:26, height:26, borderRadius:7, background:C.indigo, color:'#fff', border:'none', cursor:'pointer', fontSize:18, display:'flex', alignItems:'center', justifyContent:'center', lineHeight:1, transition:'transform .1s' },
+  addBtn:{ width:26, height:26, borderRadius:7, background:C.indigo, color:'#fff', border:'none', cursor:'pointer', fontSize:18, display:'flex', alignItems:'center', justifyContent:'center', lineHeight:1 },
+  searchBox:{ margin:'0 14px 8px', position:'relative' },
+  searchInput:{ width:'100%', padding:'7px 11px 7px 30px', borderRadius:8, border:`1px solid ${C.slate200}`, fontSize:12, outline:'none', boxSizing:'border-box', background:C.slate50 },
+  searchIcon:{ position:'absolute', left:10, top:8, fontSize:12, color:C.slate400 },
   scroll:{ flex:1, overflowY:'auto', padding:'4px 10px 10px' },
+
+  sectionLabel:{ display:'flex', alignItems:'center', gap:6, padding:'8px 6px 4px', fontSize:10, fontWeight:700, color:C.slate400, textTransform:'uppercase', letterSpacing:'.06em', cursor:'pointer', userSelect:'none' },
 
   pcsItem:{ display:'flex', alignItems:'center', gap:8, padding:'10px 10px', borderRadius:9, cursor:'pointer', marginBottom:3, fontSize:13, color:C.slate600, userSelect:'none', transition:'background .12s', border:'1px solid transparent' },
   pcsActive:{ background:C.indigoLight, color:C.indigoText, fontWeight:600 },
-  dragHandle:{ cursor:'grab', color:C.slate400, fontSize:13, opacity:.5, flexShrink:0 },
+  itemDone:{ opacity:.55 },
+  dragHandle:{ cursor:'grab', color:C.slate300, fontSize:13, flexShrink:0 },
   ordBadge:{ minWidth:24, height:22, borderRadius:6, background:C.slate100, color:C.slate600, fontSize:11, fontWeight:700, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, cursor:'text', padding:'0 4px' },
   ordBadgeActive:{ background:C.indigo, color:'#fff' },
   ordInput:{ width:34, height:22, borderRadius:6, border:`1px solid ${C.indigo}`, fontSize:11, fontWeight:700, textAlign:'center', outline:'none', padding:0 },
   itemName:{ flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' },
-  miniBtns:{ display:'flex', gap:2, flexShrink:0 },
+  nameDone:{ textDecoration:'line-through' },
+  miniBtns:{ display:'flex', gap:1, flexShrink:0 },
   miniBtn:{ width:22, height:22, borderRadius:6, border:'none', background:'transparent', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', fontSize:11, color:C.slate400 },
   miniBtnDanger:{ color:C.red },
+  miniBtnDone:{ color:C.green },
 
   wkfCard:{ border:`1px solid ${C.slate200}`, borderRadius:11, padding:'11px 12px', marginBottom:8, cursor:'pointer', background:C.white, userSelect:'none', transition:'all .15s' },
   wkfCardActive:{ borderColor:C.indigo, background:'#f5f3ff', boxShadow:'0 1px 8px rgba(99,102,241,.12)' },
   wkfName:{ fontSize:13, fontWeight:600, color:C.slate, flex:1 },
-  tag:{ display:'inline-block', background:C.greenLight, color:C.greenText, fontSize:10, padding:'2px 8px', borderRadius:10, fontWeight:600 },
+
+  badge:{ display:'inline-flex', alignItems:'center', gap:4, fontSize:10, padding:'2px 8px', borderRadius:10, fontWeight:600 },
+  badgeActif:{ background:C.indigoLight, color:C.indigoText },
+  badgeDone:{ background:C.greenLight, color:C.greenText },
 
   addBox:{ padding:'10px', margin:'0 10px 10px', background:C.slate50, borderRadius:10, border:`1px dashed ${C.slate200}` },
   input:{ width:'100%', padding:'9px 11px', borderRadius:8, border:`1px solid ${C.slate200}`, fontSize:13, outline:'none', boxSizing:'border-box' },
@@ -60,35 +71,37 @@ const S = {
   btn:{ padding:'8px 14px', fontSize:12, border:`1px solid ${C.slate200}`, borderRadius:8, background:C.white, color:C.slate600, cursor:'pointer', fontWeight:600, transition:'all .12s' },
   btnPrimary:{ background:C.indigo, color:'#fff', borderColor:C.indigo },
 
-  // Zone activités
   actZone:{ flex:1, display:'flex', flexDirection:'column', background:C.slate50, overflow:'hidden' },
-  actTop:{ padding:'18px 24px 0', display:'flex', alignItems:'flex-start', justifyContent:'space-between' },
-  actTitle:{ fontSize:18, fontWeight:700, color:C.slate },
-  actSub:{ fontSize:13, color:C.slate400, marginTop:3 },
+  actTop:{ padding:'18px 24px 14px', display:'flex', alignItems:'flex-start', justifyContent:'space-between', gap:16 },
+  actTitle:{ fontSize:18, fontWeight:700, color:C.slate, display:'flex', alignItems:'center', gap:10 },
+  actSub:{ fontSize:13, color:C.slate400, marginTop:4 },
+  progressWrap:{ marginTop:10, display:'flex', alignItems:'center', gap:10 },
+  progressBar:{ flex:1, maxWidth:200, height:6, background:C.slate200, borderRadius:6, overflow:'hidden' },
+  progressFill:{ height:'100%', background:C.green, transition:'width .3s' },
+  progressText:{ fontSize:12, color:C.slate600, fontWeight:600 },
+
   viewToggle:{ display:'flex', background:C.white, border:`1px solid ${C.slate200}`, borderRadius:9, padding:3, gap:2 },
-  toggleBtn:{ padding:'7px 14px', fontSize:12, fontWeight:600, border:'none', borderRadius:7, background:'transparent', color:C.slate400, cursor:'pointer', display:'flex', alignItems:'center', gap:6 },
+  toggleBtn:{ padding:'7px 14px', fontSize:12, fontWeight:600, border:'none', borderRadius:7, background:'transparent', color:C.slate400, cursor:'pointer' },
   toggleActive:{ background:C.indigo, color:'#fff' },
 
-  actBody:{ flex:1, overflow:'auto', padding:24 },
+  actBody:{ flex:1, overflow:'auto', padding:24, paddingTop:0 },
 
-  // Vue liste
   listCard:{ background:C.white, borderRadius:14, border:`1px solid ${C.slate200}`, padding:20 },
   actRow:{ display:'flex', alignItems:'center', gap:12, padding:'12px 14px', borderRadius:11, background:C.slate50, border:`1px solid ${C.slate100}`, marginBottom:8, transition:'all .15s' },
   actRowDrag:{ opacity:.4, borderStyle:'dashed' },
   actRowOver:{ borderColor:C.indigo, background:'#f5f3ff' },
-  actNum:{ width:26, height:26, borderRadius:'50%', background:C.indigoLight, color:C.indigoText, fontSize:12, fontWeight:700, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 },
+  actNum:{ width:26, height:26, borderRadius:'50%', background:C.indigoLight, color:C.indigoText, fontSize:12, fontWeight:700, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, cursor:'text' },
+  actNumDone:{ background:C.greenLight, color:C.greenText },
   actName:{ flex:1, color:C.slate, fontSize:14 },
 
-  addActRow:{ display:'flex', gap:8, marginTop:12, paddingTop:12, borderTop:`1px solid ${C.slate100}` },
-
-  // Vue canvas
-  canvas:{ position:'relative', background:`radial-gradient(circle, ${C.slate200} 1px, transparent 1px)`, backgroundSize:'22px 22px', borderRadius:14, border:`1px solid ${C.slate200}`, minHeight:480, overflow:'hidden' },
-  canvasNode:{ position:'absolute', background:C.white, border:`2px solid ${C.indigo}`, borderRadius:12, padding:'12px 16px', minWidth:130, maxWidth:200, cursor:'grab', boxShadow:'0 2px 12px rgba(15,23,42,.08)', userSelect:'none', transition:'box-shadow .15s' },
-  canvasNodeNum:{ position:'absolute', top:-10, left:-10, width:24, height:24, borderRadius:'50%', background:C.indigo, color:'#fff', fontSize:11, fontWeight:700, display:'flex', alignItems:'center', justifyContent:'center' },
+  canvas:{ position:'relative', background:`radial-gradient(circle, ${C.slate200} 1px, transparent 1px)`, backgroundSize:'22px 22px', borderRadius:14, border:`1px solid ${C.slate200}`, minHeight:520, overflow:'hidden' },
+  canvasNode:{ position:'absolute', background:C.white, border:`2px solid ${C.indigo}`, borderRadius:12, padding:'12px 16px', minWidth:130, maxWidth:190, cursor:'grab', boxShadow:'0 2px 12px rgba(15,23,42,.08)', userSelect:'none', zIndex:2 },
+  canvasNodeDone:{ borderColor:C.green, background:'#f0fdf4' },
+  canvasNodeNum:{ position:'absolute', top:-10, left:-10, width:24, height:24, borderRadius:'50%', background:C.indigo, color:'#fff', fontSize:11, fontWeight:700, display:'flex', alignItems:'center', justifyContent:'center', zIndex:3 },
+  canvasNodeNumDone:{ background:C.green },
   canvasNodeName:{ fontSize:13, fontWeight:600, color:C.slate, wordBreak:'break-word' },
-  canvasHint:{ position:'absolute', bottom:14, right:16, fontSize:12, color:C.slate400, background:C.white, padding:'5px 12px', borderRadius:20, border:`1px solid ${C.slate200}` },
+  canvasHint:{ position:'absolute', bottom:14, right:16, fontSize:12, color:C.slate400, background:C.white, padding:'5px 12px', borderRadius:20, border:`1px solid ${C.slate200}`, zIndex:4 },
 
-  // Mermaid
   mermaidCard:{ background:C.white, borderRadius:14, border:`1px solid ${C.slate200}`, padding:20, marginTop:16 },
   mermaidWrap:{ overflowX:'auto', display:'flex', justifyContent:'center', padding:'12px 0' },
 
@@ -96,7 +109,6 @@ const S = {
   emptyIcon:{ fontSize:40, marginBottom:10, opacity:.3 },
   emptyTitle:{ fontSize:15, fontWeight:600, color:C.slate600, marginBottom:4 },
 
-  // Auth
   authPage:{ display:'flex', alignItems:'center', justifyContent:'center', minHeight:'100vh', background:C.ink },
   authCard:{ background:'#fff', padding:40, borderRadius:18, width:370, boxShadow:'0 24px 70px rgba(0,0,0,.35)' },
   authLogo:{ display:'flex', alignItems:'center', gap:11, marginBottom:8, justifyContent:'center' },
@@ -108,21 +120,38 @@ const S = {
   authSwitch:{ textAlign:'center', marginTop:18, fontSize:13, color:C.slate400 },
   authSwitchBtn:{ background:'none', border:'none', color:C.indigo, cursor:'pointer', fontWeight:700, fontSize:13 },
 
-  toast:{ position:'fixed', bottom:24, right:24, padding:'13px 22px', borderRadius:11, fontSize:14, fontWeight:600, zIndex:2000, boxShadow:'0 6px 24px rgba(0,0,0,.18)', display:'flex', alignItems:'center', gap:10, animation:'slideIn .25s ease' },
+  toast:{ position:'fixed', bottom:24, right:24, padding:'13px 22px', borderRadius:11, fontSize:14, fontWeight:600, zIndex:3000, boxShadow:'0 6px 24px rgba(0,0,0,.18)', display:'flex', alignItems:'center', gap:10, animation:'slideIn .25s ease' },
   toastError:{ background:C.red, color:'#fff' },
   toastSuccess:{ background:C.green, color:'#fff' },
+
+  // Modal de confirmation
+  overlay:{ position:'fixed', inset:0, background:'rgba(15,23,42,.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:4000, animation:'fadeIn .15s ease' },
+  modal:{ background:'#fff', borderRadius:16, padding:28, width:380, boxShadow:'0 24px 70px rgba(0,0,0,.3)', animation:'popIn .2s ease' },
+  modalIcon:{ width:48, height:48, borderRadius:12, display:'flex', alignItems:'center', justifyContent:'center', fontSize:24, marginBottom:14 },
+  modalTitle:{ fontSize:17, fontWeight:700, color:C.slate, marginBottom:6 },
+  modalText:{ fontSize:14, color:C.slate600, lineHeight:1.5, marginBottom:22 },
+  modalBtns:{ display:'flex', gap:10 },
+  modalBtn:{ flex:1, padding:'11px 0', borderRadius:9, fontSize:14, fontWeight:600, cursor:'pointer', border:'none' },
+  modalCancel:{ background:C.slate100, color:C.slate600 },
+  modalConfirm:{ background:C.red, color:'#fff' },
+  modalConfirmIndigo:{ background:C.indigo, color:'#fff' },
 }
 
 const CSS = `
 @keyframes slideIn { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
-@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes popIn { from{opacity:0;transform:scale(.94)} to{opacity:1;transform:scale(1)} }
+@keyframes itemIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
 * { scrollbar-width:thin; scrollbar-color:#cbd5e1 transparent; }
 *::-webkit-scrollbar { width:8px; height:8px; }
 *::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:8px; }
 *::-webkit-scrollbar-track { background:transparent; }
-.fade-item { animation:fadeIn .2s ease; }
+.fade-item { animation:itemIn .2s ease; }
 input:focus { border-color:#6366f1 !important; box-shadow:0 0 0 3px rgba(99,102,241,.12); }
-.hover-lift:hover { transform:translateY(-1px); }
+.hover-lift { transition:transform .12s, box-shadow .12s; }
+.hover-lift:hover { transform:translateY(-1px); box-shadow:0 4px 14px rgba(15,23,42,.08); }
+.bread-link:hover { color:#6366f1; background:#ede9fe; }
+.mini-hover:hover { background:#e2e8f0; }
 `
 
 export default function App() {
@@ -150,18 +179,21 @@ export default function App() {
   const [editingOrd, setEditingOrd] = useState(null)
   const [ordValue, setOrdValue]     = useState('')
 
-  const [toast, setToast]   = useState(null)
-  const [actView, setActView] = useState('list') // 'list' | 'canvas'
+  const [toast, setToast]       = useState(null)
+  const [actView, setActView]   = useState('list')
   const [mermaidSvg, setMermaidSvg] = useState('')
-  const [canvasPos, setCanvasPos]   = useState({})  // { act_id: {x,y} }
+  const [canvasPos, setCanvasPos]   = useState({})
+  const [search, setSearch]     = useState('')
+  const [showDonePcs, setShowDonePcs] = useState(false)
+  const [showDoneWkf, setShowDoneWkf] = useState(false)
+  const [confirm, setConfirm]   = useState(null) // { type:'delete'|'edit', message, onConfirm }
 
-  // Drag state
   const dragItem = useRef(null)
-  const dragOver = useRef(null)
   const [dragInfo, setDragInfo] = useState({ list:null, idx:null, over:null })
   const canvasDrag = useRef(null)
+  const canvasRef = useRef(null)
 
-  const showToast = (msg, type='error') => { setToast({ msg, type }); setTimeout(() => setToast(null), 2800) }
+  const showToast = (msg, type='error') => { setToast({ msg, type }); setTimeout(()=>setToast(null), 2800) }
 
   const h = (json=false) => {
     const hd = { authorization:`Bearer ${token}` }
@@ -169,12 +201,26 @@ export default function App() {
     return hd
   }
 
+  const estTermine = (x) => x.statut === 'TERMINE'
+
+  // ── Échap ferme modale / annule édition ──
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        setConfirm(null); setEditingPcs(null); setEditingWkf(null); setEditingAct(null); setEditingOrd(null)
+        setShowAddPcs(false); setShowAddWkf(false)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   // ── Auth ──
   const seConnecter = async () => {
     const res = await fetch(`${API}/login`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(authForm) })
     const data = await res.json()
     if (!res.ok) return showToast(data.message || 'Erreur de connexion')
-    setToken(data.token); setUsername(authForm.username)
+    setToken(data.token); setUsername(data.username || authForm.username)
   }
   const sInscrire = async () => {
     if (!authForm.username || !authForm.password) return showToast('Remplissez tous les champs')
@@ -207,26 +253,26 @@ export default function App() {
     if (!acts || acts.length===0) { setMermaidSvg(''); return }
     const lignes = acts.map((a,i) => {
       const label = (a.actnom||'').replace(/"/g,"'")
-      return i < acts.length-1 ? `  A${i}["${label}"] --> A${i+1}` : `  A${i}["${label}"]`
+      const shape = a.statut==='TERMINE' ? `A${i}["✓ ${label}"]` : `A${i}["${label}"]`
+      return i < acts.length-1 ? `  ${shape} --> A${i+1}` : `  ${shape}`
     })
     const def = `flowchart TD\n  S([Début]) --> A0\n${lignes.join('\n')}\n  A${acts.length-1} --> E([Fin])`
     try { const { svg } = await mermaid.render('m'+Date.now(), def); setMermaidSvg(svg) }
     catch { setMermaidSvg('') }
   }
 
-  // ── Canvas positions ──
+  // ── Canvas ──
   const initCanvas = (acts) => {
     const pos = {}
-    acts.forEach((a,i) => {
-      const col = i % 3, row = Math.floor(i/3)
-      pos[a.act_id] = { x: 40 + col*220, y: 40 + row*120 }
-    })
+    acts.forEach((a,i) => { const col=i%3, row=Math.floor(i/3); pos[a.act_id]={ x:50+col*210, y:50+row*120 } })
     setCanvasPos(pos)
   }
 
   // ── Navigation ──
   const voirWorkflows = (pcs) => { setSelectedPcs(pcs); setSelectedWkf(null); setActivites([]); setMermaidSvg(''); chargerWorkflows(pcs) }
   const voirActivites = (wkf) => { setSelectedWkf(wkf); chargerActivites(wkf) }
+  const retourAccueil = () => { setSelectedPcs(null); setSelectedWkf(null); setWorkflows([]); setActivites([]); setMermaidSvg('') }
+  const retourProcessus = () => { setSelectedWkf(null); setActivites([]); setMermaidSvg('') }
 
   // ── CRUD Processus ──
   const ajouterProcessus = async () => {
@@ -235,14 +281,25 @@ export default function App() {
     if (!res.ok) return showToast('Erreur création')
     setNouveauPcs(''); setShowAddPcs(false); chargerProcessus(); showToast('Processus créé', 'success')
   }
-  const supprimerProcessus = async (id) => {
-    await fetch(`${API}/processus/${id}`, { method:'DELETE', headers:h() })
-    if (selectedPcs?.pcs_id===id) { setSelectedPcs(null); setSelectedWkf(null); setWorkflows([]); setActivites([]); setMermaidSvg('') }
-    chargerProcessus()
-  }
+  const supprimerProcessus = (id, nom) => setConfirm({
+    type:'delete', icon:'🗑️',
+    title:'Supprimer ce processus ?',
+    message:`« ${nom} » et tous ses workflows et activités seront supprimés définitivement.`,
+    onConfirm: async () => {
+      await fetch(`${API}/processus/${id}`, { method:'DELETE', headers:h() })
+      if (selectedPcs?.pcs_id===id) retourAccueil()
+      chargerProcessus(); setConfirm(null); showToast('Processus supprimé', 'success')
+    }
+  })
   const modifierProcessus = async (id) => {
+    if (!editValue.trim()) return
     await fetch(`${API}/processus/${id}`, { method:'PUT', headers:h(true), body:JSON.stringify({ pcsnom:editValue }) })
-    setEditingPcs(null); chargerProcessus()
+    setEditingPcs(null); chargerProcessus(); showToast('Modifié', 'success')
+  }
+  const toggleStatutPcs = async (p) => {
+    const nouveau = estTermine(p) ? 'ACTIF' : 'TERMINE'
+    await fetch(`${API}/processus/${p.pcs_id}/statut`, { method:'PATCH', headers:h(true), body:JSON.stringify({ statut:nouveau }) })
+    chargerProcessus(); showToast(nouveau==='TERMINE'?'Marqué terminé':'Réactivé', 'success')
   }
 
   // ── CRUD Workflows ──
@@ -251,14 +308,25 @@ export default function App() {
     await fetch(`${API}/processus/${selectedPcs.pcs_id}/workflows`, { method:'POST', headers:h(true), body:JSON.stringify({ wkfnom:nouveauWkf }) })
     setNouveauWkf(''); setShowAddWkf(false); chargerWorkflows(selectedPcs); showToast('Workflow créé', 'success')
   }
-  const supprimerWorkflow = async (id) => {
-    await fetch(`${API}/workflows/${id}`, { method:'DELETE', headers:h() })
-    if (selectedWkf?.wkf_id===id) { setSelectedWkf(null); setActivites([]); setMermaidSvg('') }
-    chargerWorkflows(selectedPcs)
-  }
+  const supprimerWorkflow = (id, nom) => setConfirm({
+    type:'delete', icon:'🗑️',
+    title:'Supprimer ce workflow ?',
+    message:`« ${nom} » et ses activités liées seront supprimés définitivement.`,
+    onConfirm: async () => {
+      await fetch(`${API}/workflows/${id}`, { method:'DELETE', headers:h() })
+      if (selectedWkf?.wkf_id===id) { setSelectedWkf(null); setActivites([]); setMermaidSvg('') }
+      chargerWorkflows(selectedPcs); setConfirm(null); showToast('Workflow supprimé', 'success')
+    }
+  })
   const modifierWorkflow = async (id) => {
+    if (!editValue.trim()) return
     await fetch(`${API}/workflows/${id}`, { method:'PUT', headers:h(true), body:JSON.stringify({ wkfnom:editValue }) })
-    setEditingWkf(null); chargerWorkflows(selectedPcs)
+    setEditingWkf(null); chargerWorkflows(selectedPcs); showToast('Modifié', 'success')
+  }
+  const toggleStatutWkf = async (w) => {
+    const nouveau = estTermine(w) ? 'ACTIF' : 'TERMINE'
+    await fetch(`${API}/workflows/${w.wkf_id}/statut`, { method:'PATCH', headers:h(true), body:JSON.stringify({ statut:nouveau }) })
+    chargerWorkflows(selectedPcs); showToast(nouveau==='TERMINE'?'Marqué terminé':'Réactivé', 'success')
   }
 
   // ── CRUD Activités ──
@@ -267,67 +335,80 @@ export default function App() {
     await fetch(`${API}/workflows/${selectedWkf.wkf_id}/activites`, { method:'POST', headers:h(true), body:JSON.stringify({ actnom:nouvelleAct }) })
     setNouvelleAct(''); chargerActivites(selectedWkf); showToast('Activité ajoutée', 'success')
   }
-  const supprimerActivite = async (id) => {
-    await fetch(`${API}/activites/${id}`, { method:'DELETE', headers:h() })
+  const supprimerActivite = (id, nom) => setConfirm({
+    type:'delete', icon:'🗑️',
+    title:'Supprimer cette activité ?',
+    message:`« ${nom} » sera supprimée définitivement.`,
+    onConfirm: async () => {
+      await fetch(`${API}/activites/${id}`, { method:'DELETE', headers:h() })
+      chargerActivites(selectedWkf); setConfirm(null); showToast('Activité supprimée', 'success')
+    }
+  })
+  const modifierActivite = async (id) => {
+    if (!editValue.trim()) return
+    await fetch(`${API}/activites/${id}`, { method:'PUT', headers:h(true), body:JSON.stringify({ actnom:editValue }) })
+    setEditingAct(null); chargerActivites(selectedWkf); showToast('Modifié', 'success')
+  }
+  const toggleStatutAct = async (a) => {
+    const nouveau = estTermine(a) ? 'ACTIF' : 'TERMINE'
+    await fetch(`${API}/activites/${a.act_id}/statut`, { method:'PATCH', headers:h(true), body:JSON.stringify({ statut:nouveau }) })
     chargerActivites(selectedWkf)
   }
-  const modifierActivite = async (id) => {
-    await fetch(`${API}/activites/${id}`, { method:'PUT', headers:h(true), body:JSON.stringify({ actnom:editValue }) })
-    setEditingAct(null); chargerActivites(selectedWkf)
-  }
 
-  // ── Drag & drop réordonnement (visuel) ──
+  // ── Drag & drop ──
   const onDragStart = (list, idx) => { dragItem.current = { list, idx }; setDragInfo({ list, idx, over:null }) }
-  const onDragEnter = (list, idx) => { if (dragItem.current?.list===list) setDragInfo(d => ({ ...d, over:idx })) }
+  const onDragEnter = (list, idx) => { if (dragItem.current?.list===list) setDragInfo(d=>({ ...d, over:idx })) }
   const onDragEnd = (list, items, setItems) => {
     const di = dragItem.current
     if (di && dragInfo.over!==null && di.idx!==dragInfo.over) {
-      const copy = [...items]
-      const [moved] = copy.splice(di.idx, 1)
-      copy.splice(dragInfo.over, 0, moved)
-      setItems(copy)
-      if (list==='act') genererMermaid(copy)
+      const copy=[...items]; const [m]=copy.splice(di.idx,1); copy.splice(dragInfo.over,0,m)
+      setItems(copy); if (list==='act') genererMermaid(copy)
     }
-    dragItem.current = null
-    setDragInfo({ list:null, idx:null, over:null })
+    dragItem.current=null; setDragInfo({ list:null, idx:null, over:null })
   }
 
-  // ── Édition numéro d'ordre avec détection doublon ──
-  const validerOrdre = (items, setItems, idx, listLabel) => {
+  // ── Numéro d'ordre ──
+  const validerOrdre = (items, setItems, idx, label) => {
     const n = parseInt(ordValue)
-    if (isNaN(n) || n < 1) { setEditingOrd(null); return }
-    const exists = items.some((it,i) => i!==idx && (i+1)===n)
-    if (exists) { showToast(`Numéro ${n} déjà utilisé`, 'error'); return }
-    const copy = [...items]
-    const [moved] = copy.splice(idx, 1)
-    copy.splice(Math.min(n-1, copy.length), 0, moved)
-    setItems(copy)
-    if (listLabel==='act') genererMermaid(copy)
-    setEditingOrd(null)
-    showToast('Ordre mis à jour', 'success')
+    if (isNaN(n)||n<1) { setEditingOrd(null); return }
+    if (n>items.length) { showToast(`Maximum : ${items.length}`, 'error'); return }
+    const copy=[...items]; const [m]=copy.splice(idx,1); copy.splice(n-1,0,m)
+    setItems(copy); if (label==='act') genererMermaid(copy)
+    setEditingOrd(null); showToast('Ordre mis à jour', 'success')
   }
 
   // ── Canvas drag ──
-  const canvasRef = useRef(null)
   const startCanvasDrag = (e, id) => {
     e.preventDefault()
     const rect = canvasRef.current.getBoundingClientRect()
-    const pos = canvasPos[id] || { x:40, y:40 }
-    canvasDrag.current = { id, offX: e.clientX - rect.left - pos.x, offY: e.clientY - rect.top - pos.y }
+    const pos = canvasPos[id] || { x:50, y:50 }
+    canvasDrag.current = { id, offX:e.clientX-rect.left-pos.x, offY:e.clientY-rect.top-pos.y }
   }
   const moveCanvasDrag = (e) => {
     if (!canvasDrag.current) return
     const rect = canvasRef.current.getBoundingClientRect()
     const { id, offX, offY } = canvasDrag.current
-    const x = Math.max(0, Math.min(e.clientX - rect.left - offX, rect.width - 140))
-    const y = Math.max(0, Math.min(e.clientY - rect.top - offY, rect.height - 70))
-    setCanvasPos(p => ({ ...p, [id]: { x, y } }))
+    const x = Math.max(0, Math.min(e.clientX-rect.left-offX, rect.width-150))
+    const y = Math.max(0, Math.min(e.clientY-rect.top-offY, rect.height-70))
+    setCanvasPos(p=>({ ...p, [id]:{ x, y } }))
   }
   const endCanvasDrag = () => { canvasDrag.current = null }
 
   const initiales = (n) => n ? n.slice(0,2).toUpperCase() : '?'
 
-  // ── AUTH ──
+  // ── Filtrage + tri actif/terminé ──
+  const filtrer = (items, champNom) => {
+    const q = search.toLowerCase()
+    return items.filter(x => !q || (x[champNom]||'').toLowerCase().includes(q))
+  }
+  const pcsActifs   = filtrer(processus, 'pcsnom').filter(p => !estTermine(p))
+  const pcsTermines = filtrer(processus, 'pcsnom').filter(p => estTermine(p))
+  const wkfActifs   = workflows.filter(w => !estTermine(w))
+  const wkfTermines = workflows.filter(w => estTermine(w))
+  const actTerminees = activites.filter(estTermine).length
+  const progression = activites.length ? Math.round(actTerminees/activites.length*100) : 0
+
+  // ── AUTH SCREEN ──
   if (!token) return (
     <>
       <style>{CSS}</style>
@@ -355,6 +436,93 @@ export default function App() {
     </>
   )
 
+  // ── Rendu d'un item processus ──
+  const renderPcs = (p, idx, isDone) => (
+    <div key={p.pcs_id} className="fade-item" draggable={editingPcs!==p.pcs_id && !isDone}
+      onDragStart={()=>!isDone&&onDragStart('pcs',idx)}
+      onDragEnter={()=>!isDone&&onDragEnter('pcs',idx)}
+      onDragOver={e=>e.preventDefault()}
+      onDragEnd={()=>!isDone&&onDragEnd('pcs',processus,setProcessus)}>
+      {editingPcs===p.pcs_id ? (
+        <div style={{display:'flex',gap:4,marginBottom:3}}>
+          <input style={{...S.input,flex:1}} value={editValue} autoFocus
+            onChange={e=>setEditValue(e.target.value)} onKeyDown={e=>e.key==='Enter'&&modifierProcessus(p.pcs_id)} />
+          <button style={{...S.btn,...S.btnPrimary}} onClick={()=>modifierProcessus(p.pcs_id)}>✓</button>
+          <button style={S.btn} onClick={()=>setEditingPcs(null)}>✕</button>
+        </div>
+      ) : (
+        <div style={{...S.pcsItem, ...(selectedPcs?.pcs_id===p.pcs_id?S.pcsActive:{}), ...(isDone?S.itemDone:{}),
+          ...(dragInfo.list==='pcs'&&dragInfo.idx===idx?{opacity:.4}:{}),
+          ...(dragInfo.list==='pcs'&&dragInfo.over===idx?{borderColor:C.indigo,background:'#f5f3ff'}:{})}}
+          onClick={()=>voirWorkflows(p)}>
+          {!isDone && <span style={S.dragHandle}>⋮⋮</span>}
+          {!isDone && (editingOrd===`pcs-${idx}` ? (
+            <input style={S.ordInput} value={ordValue} autoFocus type="number"
+              onChange={e=>setOrdValue(e.target.value)} onClick={e=>e.stopPropagation()}
+              onKeyDown={e=>{if(e.key==='Enter'){e.stopPropagation();validerOrdre(pcsActifs,setProcessus,idx,'pcs')}}}
+              onBlur={()=>setEditingOrd(null)} />
+          ) : (
+            <span style={{...S.ordBadge,...(selectedPcs?.pcs_id===p.pcs_id?S.ordBadgeActive:{})}}
+              onClick={e=>{e.stopPropagation();setEditingOrd(`pcs-${idx}`);setOrdValue(String(idx+1))}}>{idx+1}</span>
+          ))}
+          <span style={{...S.itemName,...(isDone?S.nameDone:{})}}>{p.pcsnom}</span>
+          <div style={S.miniBtns}>
+            <button className="mini-hover" style={{...S.miniBtn,...S.miniBtnDone}} title={isDone?'Réactiver':'Marquer terminé'}
+              onClick={e=>{e.stopPropagation();toggleStatutPcs(p)}}>{isDone?'↺':'✓'}</button>
+            <button className="mini-hover" style={S.miniBtn} title="Modifier"
+              onClick={e=>{e.stopPropagation();setEditingPcs(p.pcs_id);setEditValue(p.pcsnom)}}>✏️</button>
+            <button className="mini-hover" style={{...S.miniBtn,...S.miniBtnDanger}} title="Supprimer"
+              onClick={e=>{e.stopPropagation();supprimerProcessus(p.pcs_id,p.pcsnom)}}>✕</button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+
+  // ── Rendu d'un workflow ──
+  const renderWkf = (w, idx, isDone) => (
+    <div key={w.wkf_id} className="fade-item" draggable={editingWkf!==w.wkf_id && !isDone}
+      onDragStart={()=>!isDone&&onDragStart('wkf',idx)}
+      onDragEnter={()=>!isDone&&onDragEnter('wkf',idx)}
+      onDragOver={e=>e.preventDefault()}
+      onDragEnd={()=>!isDone&&onDragEnd('wkf',workflows,setWorkflows)}>
+      {editingWkf===w.wkf_id ? (
+        <div style={{display:'flex',gap:4,marginBottom:8}}>
+          <input style={{...S.input,flex:1}} value={editValue} autoFocus
+            onChange={e=>setEditValue(e.target.value)} onKeyDown={e=>e.key==='Enter'&&modifierWorkflow(w.wkf_id)} />
+          <button style={{...S.btn,...S.btnPrimary}} onClick={()=>modifierWorkflow(w.wkf_id)}>✓</button>
+          <button style={S.btn} onClick={()=>setEditingWkf(null)}>✕</button>
+        </div>
+      ) : (
+        <div className="hover-lift" style={{...S.wkfCard, ...(selectedWkf?.wkf_id===w.wkf_id?S.wkfCardActive:{}), ...(isDone?S.itemDone:{}),
+          ...(dragInfo.list==='wkf'&&dragInfo.over===idx?{borderColor:C.indigo}:{})}}
+          onClick={()=>voirActivites(w)}>
+          <div style={{display:'flex',alignItems:'center',gap:8}}>
+            {!isDone && <span style={S.dragHandle}>⋮⋮</span>}
+            {!isDone && (editingOrd===`wkf-${idx}` ? (
+              <input style={S.ordInput} value={ordValue} autoFocus type="number"
+                onChange={e=>setOrdValue(e.target.value)} onClick={e=>e.stopPropagation()}
+                onKeyDown={e=>{if(e.key==='Enter'){e.stopPropagation();validerOrdre(wkfActifs,setWorkflows,idx,'wkf')}}}
+                onBlur={()=>setEditingOrd(null)} />
+            ) : (
+              <span style={S.ordBadge} onClick={e=>{e.stopPropagation();setEditingOrd(`wkf-${idx}`);setOrdValue(String(idx+1))}}>{idx+1}</span>
+            ))}
+            <span style={{...S.wkfName,...(isDone?S.nameDone:{})}}>{w.wkfnom}</span>
+            <div style={S.miniBtns}>
+              <button className="mini-hover" style={{...S.miniBtn,...S.miniBtnDone}} title={isDone?'Réactiver':'Marquer terminé'}
+                onClick={e=>{e.stopPropagation();toggleStatutWkf(w)}}>{isDone?'↺':'✓'}</button>
+              <button className="mini-hover" style={S.miniBtn} onClick={e=>{e.stopPropagation();setEditingWkf(w.wkf_id);setEditValue(w.wkfnom)}}>✏️</button>
+              <button className="mini-hover" style={{...S.miniBtn,...S.miniBtnDanger}} onClick={e=>{e.stopPropagation();supprimerWorkflow(w.wkf_id,w.wkfnom)}}>✕</button>
+            </div>
+          </div>
+          <div style={{marginTop:7,paddingLeft:isDone?0:22}}>
+            <span style={{...S.badge,...(isDone?S.badgeDone:S.badgeActif)}}>{isDone?'✓ terminé':'actif'}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+
   // ── APP ──
   return (
     <>
@@ -364,10 +532,26 @@ export default function App() {
           <span>{toast.type==='success'?'✓':'⚠'}</span>{toast.msg}
         </div>}
 
-        {/* SIDEBAR ICÔNES */}
+        {/* MODAL CONFIRMATION */}
+        {confirm && (
+          <div style={S.overlay} onClick={()=>setConfirm(null)}>
+            <div style={S.modal} onClick={e=>e.stopPropagation()}>
+              <div style={{...S.modalIcon, background:confirm.type==='delete'?C.redLight:C.indigoLight}}>{confirm.icon}</div>
+              <div style={S.modalTitle}>{confirm.title}</div>
+              <div style={S.modalText}>{confirm.message}</div>
+              <div style={S.modalBtns}>
+                <button style={{...S.modalBtn,...S.modalCancel}} onClick={()=>setConfirm(null)}>Annuler</button>
+                <button style={{...S.modalBtn,...(confirm.type==='delete'?S.modalConfirm:S.modalConfirmIndigo)}}
+                  onClick={confirm.onConfirm}>{confirm.type==='delete'?'Supprimer':'Confirmer'}</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* SIDEBAR */}
         <div style={S.sidebar}>
-          <div style={S.sbLogo}>⬡</div>
-          <div style={{...S.sbIcon,...S.sbIconActive}} title="Processus">📋</div>
+          <div style={S.sbLogo} onClick={retourAccueil}>⬡</div>
+          <div style={{...S.sbIcon,...S.sbIconActive}} title="Processus" onClick={retourAccueil}>📋</div>
           <div style={S.sbSpacer} />
           <div style={S.sbIcon} title="Déconnexion" onClick={seDeconnecter}>🚪</div>
         </div>
@@ -376,8 +560,8 @@ export default function App() {
         <div style={S.main}>
           <div style={S.topbar}>
             <div style={S.breadcrumb}>
-              <span>PCS</span>
-              {selectedPcs && <><span>›</span><span style={S.breadChip}>{selectedPcs.pcsnom}</span></>}
+              <span className="bread-link" style={S.breadLink} onClick={retourAccueil}>PCS</span>
+              {selectedPcs && <><span>›</span><span style={S.breadChip} onClick={retourProcessus}>{selectedPcs.pcsnom}</span></>}
               {selectedWkf && <><span>›</span><span style={S.breadChip}>{selectedWkf.wkfnom}</span></>}
             </div>
             <div style={S.userPill}><div style={S.avatar}>{initiales(username)}</div>{username}</div>
@@ -385,15 +569,21 @@ export default function App() {
 
           <div style={S.panels}>
 
-            {/* COLONNE PROCESSUS */}
-            <div style={{...S.col, width:240, borderRight:`1px solid ${C.slate200}`}}>
+            {/* PROCESSUS */}
+            <div style={{...S.col, width:250, borderRight:`1px solid ${C.slate200}`}}>
               <div style={S.colHdr}>
                 <div style={{display:'flex',alignItems:'center'}}>
                   <span style={S.colTitle}>Processus</span>
-                  <span style={S.colCount}>{processus.length}</span>
+                  <span style={S.colCount}>{pcsActifs.length}</span>
                 </div>
                 <button style={S.addBtn} onClick={()=>setShowAddPcs(!showAddPcs)}>+</button>
               </div>
+              {processus.length > 4 && (
+                <div style={S.searchBox}>
+                  <span style={S.searchIcon}>🔍</span>
+                  <input style={S.searchInput} placeholder="Rechercher…" value={search} onChange={e=>setSearch(e.target.value)} />
+                </div>
+              )}
               {showAddPcs && (
                 <div style={S.addBox}>
                   <input style={S.input} placeholder="Nom du processus…" value={nouveauPcs} autoFocus
@@ -405,55 +595,27 @@ export default function App() {
                 </div>
               )}
               <div style={S.scroll}>
-                {processus.length===0 && <div style={S.empty}><div style={S.emptyIcon}>📂</div>Aucun processus</div>}
-                {processus.map((p,idx) => (
-                  <div key={p.pcs_id} className="fade-item" draggable={editingPcs!==p.pcs_id}
-                    onDragStart={()=>onDragStart('pcs',idx)}
-                    onDragEnter={()=>onDragEnter('pcs',idx)}
-                    onDragOver={e=>e.preventDefault()}
-                    onDragEnd={()=>onDragEnd('pcs',processus,setProcessus)}>
-                    {editingPcs===p.pcs_id ? (
-                      <div style={{display:'flex',gap:4,marginBottom:3}}>
-                        <input style={{...S.input,flex:1}} value={editValue} autoFocus
-                          onChange={e=>setEditValue(e.target.value)} onKeyDown={e=>e.key==='Enter'&&modifierProcessus(p.pcs_id)} />
-                        <button style={{...S.btn,...S.btnPrimary}} onClick={()=>modifierProcessus(p.pcs_id)}>✓</button>
-                        <button style={S.btn} onClick={()=>setEditingPcs(null)}>✕</button>
-                      </div>
-                    ) : (
-                      <div style={{...S.pcsItem,
-                        ...(selectedPcs?.pcs_id===p.pcs_id?S.pcsActive:{}),
-                        ...(dragInfo.list==='pcs'&&dragInfo.idx===idx?{opacity:.4}:{}),
-                        ...(dragInfo.list==='pcs'&&dragInfo.over===idx?{borderColor:C.indigo,background:'#f5f3ff'}:{})}}
-                        onClick={()=>voirWorkflows(p)}>
-                        <span style={S.dragHandle}>⋮⋮</span>
-                        {editingOrd===`pcs-${idx}` ? (
-                          <input style={S.ordInput} value={ordValue} autoFocus type="number"
-                            onChange={e=>setOrdValue(e.target.value)} onClick={e=>e.stopPropagation()}
-                            onKeyDown={e=>{ if(e.key==='Enter'){e.stopPropagation();validerOrdre(processus,setProcessus,idx,'pcs')} }}
-                            onBlur={()=>setEditingOrd(null)} />
-                        ) : (
-                          <span style={{...S.ordBadge,...(selectedPcs?.pcs_id===p.pcs_id?S.ordBadgeActive:{})}}
-                            onClick={e=>{e.stopPropagation();setEditingOrd(`pcs-${idx}`);setOrdValue(String(idx+1))}}>{idx+1}</span>
-                        )}
-                        <span style={S.itemName}>{p.pcsnom}</span>
-                        <div style={S.miniBtns}>
-                          <button style={S.miniBtn} onClick={e=>{e.stopPropagation();setEditingPcs(p.pcs_id);setEditValue(p.pcsnom)}}>✏️</button>
-                          <button style={{...S.miniBtn,...S.miniBtnDanger}} onClick={e=>{e.stopPropagation();supprimerProcessus(p.pcs_id)}}>✕</button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
+                {pcsActifs.length===0 && pcsTermines.length===0 && <div style={S.empty}><div style={S.emptyIcon}>📂</div>Aucun processus</div>}
+                {pcsActifs.map((p,idx) => renderPcs(p, idx, false))}
+
+                {pcsTermines.length > 0 && (
+                  <>
+                    <div style={S.sectionLabel} onClick={()=>setShowDonePcs(!showDonePcs)}>
+                      <span>{showDonePcs?'▼':'▶'}</span> Terminés ({pcsTermines.length})
+                    </div>
+                    {showDonePcs && pcsTermines.map((p,idx) => renderPcs(p, idx, true))}
+                  </>
+                )}
               </div>
             </div>
 
-            {/* COLONNE WORKFLOWS */}
+            {/* WORKFLOWS */}
             {selectedPcs && (
-              <div style={{...S.col, width:260, borderRight:`1px solid ${C.slate200}`, background:C.slate50}}>
+              <div style={{...S.col, width:265, borderRight:`1px solid ${C.slate200}`, background:C.slate50}}>
                 <div style={S.colHdr}>
                   <div style={{display:'flex',alignItems:'center'}}>
                     <span style={S.colTitle}>Workflows</span>
-                    <span style={S.colCount}>{workflows.length}</span>
+                    <span style={S.colCount}>{wkfActifs.length}</span>
                   </div>
                   <button style={S.addBtn} onClick={()=>setShowAddWkf(!showAddWkf)}>+</button>
                 </div>
@@ -468,58 +630,37 @@ export default function App() {
                   </div>
                 )}
                 <div style={S.scroll}>
-                  {workflows.length===0 && <div style={S.empty}><div style={S.emptyIcon}>🔀</div>Aucun workflow</div>}
-                  {workflows.map((w,idx) => (
-                    <div key={w.wkf_id} className="fade-item" draggable={editingWkf!==w.wkf_id}
-                      onDragStart={()=>onDragStart('wkf',idx)}
-                      onDragEnter={()=>onDragEnter('wkf',idx)}
-                      onDragOver={e=>e.preventDefault()}
-                      onDragEnd={()=>onDragEnd('wkf',workflows,setWorkflows)}>
-                      {editingWkf===w.wkf_id ? (
-                        <div style={{display:'flex',gap:4,marginBottom:8}}>
-                          <input style={{...S.input,flex:1}} value={editValue} autoFocus
-                            onChange={e=>setEditValue(e.target.value)} onKeyDown={e=>e.key==='Enter'&&modifierWorkflow(w.wkf_id)} />
-                          <button style={{...S.btn,...S.btnPrimary}} onClick={()=>modifierWorkflow(w.wkf_id)}>✓</button>
-                          <button style={S.btn} onClick={()=>setEditingWkf(null)}>✕</button>
-                        </div>
-                      ) : (
-                        <div className="hover-lift" style={{...S.wkfCard,
-                          ...(selectedWkf?.wkf_id===w.wkf_id?S.wkfCardActive:{}),
-                          ...(dragInfo.list==='wkf'&&dragInfo.idx===idx?{opacity:.4}:{}),
-                          ...(dragInfo.list==='wkf'&&dragInfo.over===idx?{borderColor:C.indigo}:{})}}
-                          onClick={()=>voirActivites(w)}>
-                          <div style={{display:'flex',alignItems:'center',gap:8}}>
-                            <span style={S.dragHandle}>⋮⋮</span>
-                            {editingOrd===`wkf-${idx}` ? (
-                              <input style={S.ordInput} value={ordValue} autoFocus type="number"
-                                onChange={e=>setOrdValue(e.target.value)} onClick={e=>e.stopPropagation()}
-                                onKeyDown={e=>{ if(e.key==='Enter'){e.stopPropagation();validerOrdre(workflows,setWorkflows,idx,'wkf')} }}
-                                onBlur={()=>setEditingOrd(null)} />
-                            ) : (
-                              <span style={S.ordBadge} onClick={e=>{e.stopPropagation();setEditingOrd(`wkf-${idx}`);setOrdValue(String(idx+1))}}>{idx+1}</span>
-                            )}
-                            <span style={S.wkfName}>{w.wkfnom}</span>
-                            <div style={S.miniBtns}>
-                              <button style={S.miniBtn} onClick={e=>{e.stopPropagation();setEditingWkf(w.wkf_id);setEditValue(w.wkfnom)}}>✏️</button>
-                              <button style={{...S.miniBtn,...S.miniBtnDanger}} onClick={e=>{e.stopPropagation();supprimerWorkflow(w.wkf_id)}}>✕</button>
-                            </div>
-                          </div>
-                          <div style={{marginTop:7,paddingLeft:22}}><span style={S.tag}>actif</span></div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                  {wkfActifs.length===0 && wkfTermines.length===0 && <div style={S.empty}><div style={S.emptyIcon}>🔀</div>Aucun workflow</div>}
+                  {wkfActifs.map((w,idx) => renderWkf(w, idx, false))}
+
+                  {wkfTermines.length > 0 && (
+                    <>
+                      <div style={S.sectionLabel} onClick={()=>setShowDoneWkf(!showDoneWkf)}>
+                        <span>{showDoneWkf?'▼':'▶'}</span> Terminés ({wkfTermines.length})
+                      </div>
+                      {showDoneWkf && wkfTermines.map((w,idx) => renderWkf(w, idx, true))}
+                    </>
+                  )}
                 </div>
               </div>
             )}
 
-            {/* ZONE ACTIVITÉS */}
+            {/* ACTIVITÉS */}
             {selectedWkf ? (
               <div style={S.actZone}>
                 <div style={S.actTop}>
                   <div>
-                    <div style={S.actTitle}>{selectedWkf.wkfnom}</div>
+                    <div style={S.actTitle}>
+                      {selectedWkf.wkfnom}
+                      {estTermine(selectedWkf) && <span style={{...S.badge,...S.badgeDone}}>✓ terminé</span>}
+                    </div>
                     <div style={S.actSub}>{activites.length} activité{activites.length!==1?'s':''} · glissez pour réorganiser</div>
+                    {activites.length>0 && (
+                      <div style={S.progressWrap}>
+                        <div style={S.progressBar}><div style={{...S.progressFill, width:`${progression}%`}} /></div>
+                        <span style={S.progressText}>{actTerminees}/{activites.length} terminées</span>
+                      </div>
+                    )}
                   </div>
                   <div style={S.viewToggle}>
                     <button style={{...S.toggleBtn,...(actView==='list'?S.toggleActive:{})}} onClick={()=>setActView('list')}>☰ Liste</button>
@@ -532,43 +673,48 @@ export default function App() {
                     <>
                       <div style={S.listCard}>
                         {activites.length===0 && <div style={S.empty}><div style={S.emptyIcon}>✅</div><div style={S.emptyTitle}>Aucune activité</div>Ajoutez-en une ci-dessous</div>}
-                        {activites.map((a,idx) => (
-                          <div key={a.act_id} className="fade-item" draggable={editingAct!==a.act_id}
-                            onDragStart={()=>onDragStart('act',idx)}
-                            onDragEnter={()=>onDragEnter('act',idx)}
-                            onDragOver={e=>e.preventDefault()}
-                            onDragEnd={()=>onDragEnd('act',activites,setActivites)}
-                            style={{...S.actRow,
-                              ...(dragInfo.list==='act'&&dragInfo.idx===idx?S.actRowDrag:{}),
-                              ...(dragInfo.list==='act'&&dragInfo.over===idx?S.actRowOver:{})}}>
-                            <span style={S.dragHandle}>⋮⋮</span>
-                            {editingOrd===`act-${idx}` ? (
-                              <input style={{...S.ordInput,width:38,height:26}} value={ordValue} autoFocus type="number"
-                                onChange={e=>setOrdValue(e.target.value)}
-                                onKeyDown={e=>e.key==='Enter'&&validerOrdre(activites,setActivites,idx,'act')}
-                                onBlur={()=>setEditingOrd(null)} />
-                            ) : (
-                              <span style={S.actNum} onClick={()=>{setEditingOrd(`act-${idx}`);setOrdValue(String(idx+1))}}>{idx+1}</span>
-                            )}
-                            {editingAct===a.act_id ? (
-                              <>
-                                <input style={{...S.input,flex:1}} value={editValue} autoFocus
-                                  onChange={e=>setEditValue(e.target.value)} onKeyDown={e=>e.key==='Enter'&&modifierActivite(a.act_id)} />
-                                <button style={{...S.btn,...S.btnPrimary}} onClick={()=>modifierActivite(a.act_id)}>✓</button>
-                                <button style={S.btn} onClick={()=>setEditingAct(null)}>✕</button>
-                              </>
-                            ) : (
-                              <>
-                                <span style={S.actName}>{a.actnom}</span>
-                                <div style={S.miniBtns}>
-                                  <button style={S.miniBtn} onClick={()=>{setEditingAct(a.act_id);setEditValue(a.actnom)}}>✏️</button>
-                                  <button style={{...S.miniBtn,...S.miniBtnDanger}} onClick={()=>supprimerActivite(a.act_id)}>✕</button>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        ))}
-                        <div style={S.addActRow}>
+                        {activites.map((a,idx) => {
+                          const done = estTermine(a)
+                          return (
+                            <div key={a.act_id} className="fade-item" draggable={editingAct!==a.act_id}
+                              onDragStart={()=>onDragStart('act',idx)} onDragEnter={()=>onDragEnter('act',idx)}
+                              onDragOver={e=>e.preventDefault()} onDragEnd={()=>onDragEnd('act',activites,setActivites)}
+                              style={{...S.actRow,
+                                ...(done?{opacity:.6,background:'#f0fdf4',borderColor:C.greenBorder}:{}),
+                                ...(dragInfo.list==='act'&&dragInfo.idx===idx?S.actRowDrag:{}),
+                                ...(dragInfo.list==='act'&&dragInfo.over===idx?S.actRowOver:{})}}>
+                              <span style={S.dragHandle}>⋮⋮</span>
+                              {editingOrd===`act-${idx}` ? (
+                                <input style={{...S.ordInput,width:38,height:26}} value={ordValue} autoFocus type="number"
+                                  onChange={e=>setOrdValue(e.target.value)}
+                                  onKeyDown={e=>e.key==='Enter'&&validerOrdre(activites,setActivites,idx,'act')}
+                                  onBlur={()=>setEditingOrd(null)} />
+                              ) : (
+                                <span style={{...S.actNum,...(done?S.actNumDone:{})}}
+                                  onClick={()=>{setEditingOrd(`act-${idx}`);setOrdValue(String(idx+1))}}>{done?'✓':idx+1}</span>
+                              )}
+                              {editingAct===a.act_id ? (
+                                <>
+                                  <input style={{...S.input,flex:1}} value={editValue} autoFocus
+                                    onChange={e=>setEditValue(e.target.value)} onKeyDown={e=>e.key==='Enter'&&modifierActivite(a.act_id)} />
+                                  <button style={{...S.btn,...S.btnPrimary}} onClick={()=>modifierActivite(a.act_id)}>✓</button>
+                                  <button style={S.btn} onClick={()=>setEditingAct(null)}>✕</button>
+                                </>
+                              ) : (
+                                <>
+                                  <span style={{...S.actName,...(done?S.nameDone:{})}}>{a.actnom}</span>
+                                  <div style={S.miniBtns}>
+                                    <button className="mini-hover" style={{...S.miniBtn,...S.miniBtnDone}} title={done?'Réactiver':'Marquer terminée'}
+                                      onClick={()=>toggleStatutAct(a)}>{done?'↺':'✓'}</button>
+                                    <button className="mini-hover" style={S.miniBtn} onClick={()=>{setEditingAct(a.act_id);setEditValue(a.actnom)}}>✏️</button>
+                                    <button className="mini-hover" style={{...S.miniBtn,...S.miniBtnDanger}} onClick={()=>supprimerActivite(a.act_id,a.actnom)}>✕</button>
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                          )
+                        })}
+                        <div style={{display:'flex',gap:8,marginTop:12,paddingTop:12,borderTop:`1px solid ${C.slate100}`}}>
                           <input style={{...S.input,flex:1}} placeholder="Nouvelle activité…" value={nouvelleAct}
                             onChange={e=>setNouvelleAct(e.target.value)} onKeyDown={e=>e.key==='Enter'&&ajouterActivite()} />
                           <button style={{...S.btn,...S.btnPrimary}} onClick={ajouterActivite}>+ Ajouter</button>
@@ -585,18 +731,33 @@ export default function App() {
                   ) : (
                     <div ref={canvasRef} style={S.canvas}
                       onMouseMove={moveCanvasDrag} onMouseUp={endCanvasDrag} onMouseLeave={endCanvasDrag}>
+                      {/* SVG flèches reliant les activités successives */}
+                      <svg style={{position:'absolute',inset:0,width:'100%',height:'100%',zIndex:1,pointerEvents:'none'}}>
+                        <defs>
+                          <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L8,3 L0,6 Z" fill={C.slate300} />
+                          </marker>
+                        </defs>
+                        {activites.slice(0,-1).map((a,i) => {
+                          const p1 = canvasPos[a.act_id], p2 = canvasPos[activites[i+1].act_id]
+                          if (!p1||!p2) return null
+                          const x1=p1.x+75, y1=p1.y+30, x2=p2.x+75, y2=p2.y+30
+                          return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={C.slate300} strokeWidth="2" markerEnd="url(#arrow)" />
+                        })}
+                      </svg>
                       {activites.length===0 && <div style={{...S.empty,paddingTop:200}}><div style={S.emptyIcon}>⬚</div><div style={S.emptyTitle}>Canvas vide</div>Ajoutez des activités en vue Liste</div>}
                       {activites.map((a,idx) => {
-                        const pos = canvasPos[a.act_id] || { x:40, y:40 }
+                        const pos = canvasPos[a.act_id] || { x:50, y:50 }
+                        const done = estTermine(a)
                         return (
-                          <div key={a.act_id} style={{...S.canvasNode, left:pos.x, top:pos.y}}
-                            onMouseDown={e=>startCanvasDrag(e,a.act_id)}>
-                            <div style={S.canvasNodeNum}>{idx+1}</div>
-                            <div style={S.canvasNodeName}>{a.actnom}</div>
+                          <div key={a.act_id} style={{...S.canvasNode,...(done?S.canvasNodeDone:{}), left:pos.x, top:pos.y}}
+                            onMouseDown={e=>startCanvasDrag(e,a.act_id)} onDoubleClick={()=>toggleStatutAct(a)}>
+                            <div style={{...S.canvasNodeNum,...(done?S.canvasNodeNumDone:{})}}>{done?'✓':idx+1}</div>
+                            <div style={{...S.canvasNodeName,...(done?S.nameDone:{})}}>{a.actnom}</div>
                           </div>
                         )
                       })}
-                      {activites.length>0 && <div style={S.canvasHint}>✋ Glissez les cartes librement</div>}
+                      {activites.length>0 && <div style={S.canvasHint}>✋ Glissez · double-clic = terminer</div>}
                     </div>
                   )}
                 </div>
